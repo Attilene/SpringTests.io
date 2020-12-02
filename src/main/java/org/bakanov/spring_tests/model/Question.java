@@ -1,29 +1,28 @@
 package org.bakanov.spring_tests.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "questions")
 public class Question implements Serializable {
     @Id
-    @GeneratedValue(generator = "question_generator")
-    @SequenceGenerator(
-            name="question_generator",
-            sequenceName = "question_sequence"
-    )
-    private int row_id;
+    @NotNull
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "row_id")
+    private int id;
 
-    @Column(columnDefinition = "text")
+    @NotNull
     private String text;
 
-    @Column(columnDefinition = "integer")
+    @NotNull
     private Integer score;
 
-    @Column(columnDefinition = "boolean")
+    @NotNull
     private Boolean active;
 
-    public int getRow_id() { return row_id; }
+    public int getId() { return id; }
 
     public String getText() { return text; }
 
@@ -40,7 +39,7 @@ public class Question implements Serializable {
     @Override
     public String toString() {
         return "Question{" +
-                "row_id=" + row_id +
+                "row_id=" + id +
                 ", text='" + text + '\'' +
                 ", score=" + score +
                 ", active=" + active +

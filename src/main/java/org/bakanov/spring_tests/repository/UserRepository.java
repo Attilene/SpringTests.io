@@ -3,4 +3,9 @@ package org.bakanov.spring_tests.repository;
 import org.bakanov.spring_tests.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Integer> { }
+import java.util.List;
+
+public interface UserRepository extends JpaRepository<User, Integer> {
+    List<User> findByGroupId(Integer groupId);
+    List<User> findByRoleId(Integer roleId);
+}

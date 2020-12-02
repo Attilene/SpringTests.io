@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 public class AnswerController {
-//    TODO Fix AnswerController
     @Autowired
     private QuestionRepository questionRepository;
 
@@ -22,7 +21,7 @@ public class AnswerController {
 
     @GetMapping("/questions/{questionId}/answers")
     public List<Answer> getAnswersByQuestionId(@PathVariable Integer questionId) {
-        return answerRepository.findByQuestionRow_id(questionId);
+        return answerRepository.findByQuestionId(questionId);
     }
 
     @PostMapping("/questions/{questionId}/answers")

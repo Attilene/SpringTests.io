@@ -9,8 +9,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "answers")
-public class Answer implements Serializable {
+@Table(name = "tests")
+public class Test implements Serializable {
     @Id
     @NotNull
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,36 +19,33 @@ public class Answer implements Serializable {
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "test_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
+    private TestList testList;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "question_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Question question;
 
-    @NotNull
-    private String text;
-
-    @NotNull
-    private Boolean correct;
-
     public int getId() { return id; }
 
-    public String getText() { return text; }
+    public TestList getTestList() { return testList; }
 
     public Question getQuestion() { return question; }
 
-    public boolean getCorrect() { return correct; }
-
-    public void setText(String text) { this.text = text; }
-
-    public void setCorrect(Boolean correct) { this.correct = correct; }
+    public void setTestList(TestList testList) { this.testList = testList; }
 
     public void setQuestion(Question question) { this.question = question; }
 
     @Override
     public String toString() {
-        return "Answer{" +
+        return "Test{" +
                 "id=" + id +
-                ", text='" + text + '\'' +
+                ", testList=" + testList +
                 ", question=" + question +
                 '}';
     }
