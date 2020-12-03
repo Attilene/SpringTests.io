@@ -17,14 +17,10 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/questions")
-    public Page<Question> getQuestions(Pageable pageable) {
-        return questionRepository.findAll(pageable);
-    }
+    public Page<Question> getQuestions(Pageable pageable) { return questionRepository.findAll(pageable); }
 
     @PostMapping("/questions")
-    public Question createdQuestion(@Valid @RequestBody Question question) {
-        return questionRepository.save(question);
-    }
+    public Question createdQuestion(@Valid @RequestBody Question question) { return questionRepository.save(question); }
 
     @PutMapping("/questions/{questionId}")
     public Question updateQuestion(@PathVariable Integer questionId, @Valid @RequestBody Question questionRequest) {
