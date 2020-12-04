@@ -24,17 +24,18 @@ public class UserController {
     private GroupRepository groupRepository;
 
     @GetMapping("/roles/{roleId}/users")
-    public List<User> getUserByRoleId(@PathVariable Integer roleId) {
+    public List<User> getUsersByRoleId(@PathVariable Integer roleId) {
         return userRepository.findByRoleId(roleId);
     }
 
     @GetMapping("/groups/{groupId}/users")
-    public List<User> getUserByGroupId(@PathVariable Integer groupId) {
+    public List<User> getUsersByGroupId(@PathVariable Integer groupId) {
         return userRepository.findByGroupId(groupId);
     }
 
     @PostMapping("/roles/{roleId}/users")
-    public User addRoleToUser(@PathVariable Integer roleId, @Valid @RequestBody User user) {
+    public User addRoleToUser(@PathVariable Integer roleId,
+                              @Valid @RequestBody User user) {
         return roleRepository.findById(roleId)
                 .map(role -> {
                     user.setRole(role);
@@ -43,7 +44,8 @@ public class UserController {
     }
 
     @PostMapping("groups/{groupId}/users")
-    public User addGroupToUser(@PathVariable Integer groupId, @Valid @RequestBody User user) {
+    public User addGroupToUser(@PathVariable Integer groupId,
+                               @Valid @RequestBody User user) {
         return groupRepository.findById(groupId)
                 .map(group -> {
                     user.setGroup(group);
@@ -65,8 +67,6 @@ public class UserController {
                     user.setMiddle_name(userRequest.getMiddle_name());
                     user.setLogin(userRequest.getLogin());
                     user.setPassword_hash(userRequest.getPassword_hash());
-                    user.setRole(userRequest.getRole());
-                    user.setGroup(userRequest.getGroup());
                     return userRepository.save(user);
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
     }
@@ -85,15 +85,13 @@ public class UserController {
                     user.setMiddle_name(userRequest.getMiddle_name());
                     user.setLogin(userRequest.getLogin());
                     user.setPassword_hash(userRequest.getPassword_hash());
-                    user.setGroup(userRequest.getGroup());
-                    user.setRole(userRequest.getRole());
                     return userRepository.save(user);
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
     }
 
     @DeleteMapping("/roles/{roleId}/users/{userId}")
     public ResponseEntity<?> deleteUserByRole(@PathVariable Integer roleId,
-                                                @PathVariable Integer userId) {
+                                              @PathVariable Integer userId) {
         if (!roleRepository.existsById(roleId)) {
             throw new ResourceNotFoundException("Role not found with id " + roleId);
         }
@@ -106,7 +104,7 @@ public class UserController {
 
     @DeleteMapping("/groups/{groupId}/users/{userId}")
     public ResponseEntity<?> deleteUserByGroup(@PathVariable Integer groupId,
-                                                 @PathVariable Integer userId) {
+                                               @PathVariable Integer userId) {
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("Group not found with id " + groupId);
         }

@@ -23,7 +23,8 @@ public class SubjectController {
     public Subject createdSubject(@Valid @RequestBody Subject subject) { return subjectRepository.save(subject); }
 
     @PutMapping("/subjects/{subjectId}")
-    public Subject updateSubject(@PathVariable Integer subjectId, @Valid @RequestBody Subject subjectRequest) {
+    public Subject updateSubject(@PathVariable Integer subjectId,
+                                 @Valid @RequestBody Subject subjectRequest) {
         return subjectRepository.findById(subjectId)
                 .map(subject -> {
                     subject.setName(subjectRequest.getName());

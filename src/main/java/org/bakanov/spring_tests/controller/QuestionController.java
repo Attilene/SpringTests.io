@@ -23,7 +23,8 @@ public class QuestionController {
     public Question createdQuestion(@Valid @RequestBody Question question) { return questionRepository.save(question); }
 
     @PutMapping("/questions/{questionId}")
-    public Question updateQuestion(@PathVariable Integer questionId, @Valid @RequestBody Question questionRequest) {
+    public Question updateQuestion(@PathVariable Integer questionId,
+                                   @Valid @RequestBody Question questionRequest) {
         return questionRepository.findById(questionId)
                 .map(question -> {
                     question.setText(questionRequest.getText());

@@ -23,7 +23,8 @@ public class GroupController {
     public Group createdGroup(@Valid @RequestBody Group group) { return groupRepository.save(group); }
 
     @PutMapping("/groups/{groupId}")
-    public Group updateGroup(@PathVariable Integer groupId, @Valid @RequestBody Group groupRequest) {
+    public Group updateGroup(@PathVariable Integer groupId,
+                             @Valid @RequestBody Group groupRequest) {
         return groupRepository.findById(groupId)
                 .map(group -> {
                     group.setName(groupRequest.getName());

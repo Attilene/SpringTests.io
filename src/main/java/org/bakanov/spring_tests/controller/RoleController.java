@@ -23,7 +23,8 @@ public class RoleController {
     public Role createdRole(@Valid @RequestBody Role role) { return roleRepository.save(role); }
 
     @PutMapping("/roles/{roleId}")
-    public Role updateRole(@PathVariable Integer roleId, @Valid @RequestBody Role roleRequest) {
+    public Role updateRole(@PathVariable Integer roleId,
+                           @Valid @RequestBody Role roleRequest) {
         return roleRepository.findById(roleId)
                 .map(role -> {
                     role.setName(roleRequest.getName());

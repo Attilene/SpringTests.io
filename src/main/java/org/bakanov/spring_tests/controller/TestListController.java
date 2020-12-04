@@ -2,6 +2,7 @@ package org.bakanov.spring_tests.controller;
 
 import org.bakanov.spring_tests.exceptions.ResourceNotFoundException;
 import org.bakanov.spring_tests.model.TestList;
+import org.bakanov.spring_tests.model.User;
 import org.bakanov.spring_tests.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,13 +29,13 @@ public class TestListController {
     private GroupRepository groupRepository;
 
     @GetMapping("/subject/{subjectId}/testLists")
-    public List<TestList> getTestListBySubjectId(@PathVariable Integer subjectId) {
+    public List<TestList> getTestListsBySubjectId(@PathVariable Integer subjectId) {
         return testListRepository.findBySubjectId(subjectId);
     }
 
     @GetMapping("/roles/{roleId}/users/{userId}/testLists")
-    public List<TestList> getTestListByTeacherIdAndRole(@PathVariable Integer roleId,
-                                                        @PathVariable Integer userId) {
+    public List<TestList> getTestListsByTeacherIdAndRole(@PathVariable Integer roleId,
+                                                         @PathVariable Integer userId) {
         if (!roleRepository.existsById(roleId)) {
             throw new ResourceNotFoundException("Role not found with id " + roleId);
         }
@@ -42,8 +43,8 @@ public class TestListController {
     }
 
     @GetMapping("/groups/{groupId}/users/{userId}/testLists")
-    public List<TestList> getTestListByTeacherIdAndGroup(@PathVariable Integer groupId,
-                                                 @PathVariable Integer userId) {
+    public List<TestList> getTestListsByTeacherIdAndGroup(@PathVariable Integer groupId,
+                                                          @PathVariable Integer userId) {
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("Group not found with id " + groupId);
         }
@@ -51,7 +52,8 @@ public class TestListController {
     }
 
     @PostMapping("/subject/{subjectId}/testLists")
-    public TestList addSubjectToTestList(@PathVariable Integer subjectId, @Valid @RequestBody TestList testList) {
+    public TestList addSubjectToTestList(@PathVariable Integer subjectId,
+                                         @Valid @RequestBody TestList testList) {
         return subjectRepository.findById(subjectId)
                 .map(subject -> {
                     testList.setSubject(subject);
@@ -97,8 +99,6 @@ public class TestListController {
         return testListRepository.findById(testListId)
                 .map(testList -> {
                     testList.setName(testListRequest.getName());
-                    testList.setSubject(testListRequest.getSubject());
-                    testList.setTeacher(testListRequest.getTeacher());
                     return testListRepository.save(testList);
                 }).orElseThrow(() -> new ResourceNotFoundException("TestList not found with id " + testListId));
     }
@@ -117,8 +117,6 @@ public class TestListController {
         return testListRepository.findById(testListId)
                 .map(testList -> {
                     testList.setName(testListRequest.getName());
-                    testList.setSubject(testListRequest.getSubject());
-                    testList.setTeacher(testListRequest.getTeacher());
                     return testListRepository.save(testList);
                 }).orElseThrow(() -> new ResourceNotFoundException("TestList not found with id " + testListId));
     }
@@ -137,8 +135,6 @@ public class TestListController {
         return testListRepository.findById(testListId)
                 .map(testList -> {
                     testList.setName(testListRequest.getName());
-                    testList.setSubject(testListRequest.getSubject());
-                    testList.setTeacher(testListRequest.getTeacher());
                     return testListRepository.save(testList);
                 }).orElseThrow(() -> new ResourceNotFoundException("TestList not found with id " + testListId));
     }

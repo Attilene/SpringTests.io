@@ -31,12 +31,12 @@ public class ScheduleController {
     private UserRepository userRepository;
 
     @GetMapping("/groups/{groupId}/schedules")
-    public List<Schedule> getScheduleByGroupId(@PathVariable Integer groupId) {
+    public List<Schedule> getSchedulesByGroupId(@PathVariable Integer groupId) {
         return scheduleRepository.findByGroupId(groupId);
     }
 
     @GetMapping("/subject/{subjectId}/testLists/{testListId}/schedules")
-    public List<Schedule> getScheduleByTestListIdAndSubject(@PathVariable Integer subjectId,
+    public List<Schedule> getSchedulesByTestListIdAndSubject(@PathVariable Integer subjectId,
                                                             @PathVariable Integer testListId) {
         if (!subjectRepository.existsById(subjectId)) {
             throw new ResourceNotFoundException("Subject not found with id " + subjectId);
@@ -45,7 +45,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/roles/{roleId}/users/{userId}/testLists/{testListId}/schedules")
-    public List<Schedule> getScheduleByTestListIdAndUserWithRole(@PathVariable Integer roleId,
+    public List<Schedule> getSchedulesByTestListIdAndUserWithRole(@PathVariable Integer roleId,
                                                                  @PathVariable Integer userId,
                                                                  @PathVariable Integer testListId) {
         if (!roleRepository.existsById(roleId)) {
@@ -58,7 +58,7 @@ public class ScheduleController {
     }
 
     @GetMapping("/groups/{groupId}/users/{userId}/testLists/{testListId}/schedules")
-    public List<Schedule> getScheduleByTestListIdAndUserWithGroup(@PathVariable Integer groupId,
+    public List<Schedule> getSchedulesByTestListIdAndUserWithGroup(@PathVariable Integer groupId,
                                                                   @PathVariable Integer userId,
                                                                   @PathVariable Integer testListId) {
         if (!groupRepository.existsById(groupId)) {
@@ -145,8 +145,6 @@ public class ScheduleController {
                     schedule.setStart_time(scheduleRequest.getStart_time());
                     schedule.setEnd_dt(scheduleRequest.getEnd_dt());
                     schedule.setEnd_time(scheduleRequest.getEnd_time());
-                    schedule.setGroup(scheduleRequest.getGroup());
-                    schedule.setTestList(scheduleRequest.getTestList());
                     return scheduleRepository.save(schedule);
                 }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + scheduleId));
     }
@@ -170,8 +168,6 @@ public class ScheduleController {
                     schedule.setStart_time(scheduleRequest.getStart_time());
                     schedule.setEnd_dt(scheduleRequest.getEnd_dt());
                     schedule.setEnd_time(scheduleRequest.getEnd_time());
-                    schedule.setTestList(scheduleRequest.getTestList());
-                    schedule.setGroup(scheduleRequest.getGroup());
                     return scheduleRepository.save(schedule);
                 }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + scheduleId));
     }
@@ -199,8 +195,6 @@ public class ScheduleController {
                     schedule.setStart_time(scheduleRequest.getStart_time());
                     schedule.setEnd_dt(scheduleRequest.getEnd_dt());
                     schedule.setEnd_time(scheduleRequest.getEnd_time());
-                    schedule.setTestList(scheduleRequest.getTestList());
-                    schedule.setGroup(scheduleRequest.getGroup());
                     return scheduleRepository.save(schedule);
                 }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + scheduleId));
     }
@@ -228,8 +222,6 @@ public class ScheduleController {
                     schedule.setStart_time(scheduleRequest.getStart_time());
                     schedule.setEnd_dt(scheduleRequest.getEnd_dt());
                     schedule.setEnd_time(scheduleRequest.getEnd_time());
-                    schedule.setTestList(scheduleRequest.getTestList());
-                    schedule.setGroup(scheduleRequest.getGroup());
                     return scheduleRepository.save(schedule);
                 }).orElseThrow(() -> new ResourceNotFoundException("Schedule not found with id " + scheduleId));
     }
