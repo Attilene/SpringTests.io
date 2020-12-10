@@ -1,6 +1,7 @@
 package org.bakanov.spring_tests.controller;
 
 import org.bakanov.spring_tests.exceptions.ResourceNotFoundException;
+import org.bakanov.spring_tests.model.Group;
 import org.bakanov.spring_tests.model.User;
 import org.bakanov.spring_tests.repository.GroupRepository;
 import org.bakanov.spring_tests.repository.RoleRepository;
@@ -24,14 +25,10 @@ public class UserController {
     private GroupRepository groupRepository;
 
     @GetMapping("/roles/{roleId}/users")
-    public List<User> getUsersByRoleId(@PathVariable Integer roleId) {
-        return userRepository.findByRoleId(roleId);
-    }
+    public List<User> getUsersByRoleId(@PathVariable Integer roleId) { return userRepository.findByRoleId(roleId); }
 
     @GetMapping("/groups/{groupId}/users")
-    public List<User> getUsersByGroupId(@PathVariable Integer groupId) {
-        return userRepository.findByGroupId(groupId);
-    }
+    public List<User> getUsersByGroupId(@PathVariable Integer groupId) { return userRepository.findByGroupId(groupId); }
 
     @PostMapping("/roles/{roleId}/users")
     public User addRoleToUser(@PathVariable Integer roleId,
@@ -43,14 +40,21 @@ public class UserController {
                 }).orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + roleId));
     }
 
-    @PostMapping("groups/{groupId}/users")
-    public User addGroupToUser(@PathVariable Integer groupId,
-                               @Valid @RequestBody User user) {
-        return groupRepository.findById(groupId)
-                .map(group -> {
+    @PostMapping("groups/{groupId}/roles/{roleId}/users")
+    public User addGroupAndRoleToUser(@PathVariable Integer groupId,
+                                      @PathVariable Integer roleId,
+                                      @Valid @RequestBody User user) {
+        Group group;
+        if (!groupRepository.existsById(groupId)) {
+            throw new ResourceNotFoundException("Group not found with id " + groupId);
+        }
+        else { group = groupRepository.getOne(groupId); }
+        return roleRepository.findById(roleId)
+                .map(role -> {
+                    user.setRole(role);
                     user.setGroup(group);
                     return userRepository.save(user);
-                }).orElseThrow(() -> new ResourceNotFoundException("Group not found with id " + groupId));
+                }).orElseThrow(() -> new ResourceNotFoundException("Role not found with id " + roleId));
     }
 
     @PutMapping("/roles/{roleId}/users/{userId}")
@@ -71,12 +75,16 @@ public class UserController {
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
     }
 
-    @PutMapping("/groups/{groupId}/users/{userId}")
+    @PutMapping("groups/{groupId}/roles/{roleId}/users/{userId}")
     public User updateUserAndGroup(@PathVariable Integer groupId,
+                                   @PathVariable Integer roleId,
                                    @PathVariable Integer userId,
                                    @Valid @RequestBody User userRequest){
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("Group not found with id " + groupId);
+        }
+        if (!roleRepository.existsById(roleId)) {
+            throw new ResourceNotFoundException("Role not found with id " + roleId);
         }
         return userRepository.findById(userId)
                 .map(user -> {
@@ -102,11 +110,15 @@ public class UserController {
                 }).orElseThrow(() -> new ResourceNotFoundException("User not found with id " + userId));
     }
 
-    @DeleteMapping("/groups/{groupId}/users/{userId}")
+    @DeleteMapping("groups/{groupId}/roles/{roleId}/users/{userId}")
     public ResponseEntity<?> deleteUserByGroup(@PathVariable Integer groupId,
+                                               @PathVariable Integer roleId,
                                                @PathVariable Integer userId) {
         if (!groupRepository.existsById(groupId)) {
             throw new ResourceNotFoundException("Group not found with id " + groupId);
+        }
+        if (!roleRepository.existsById(roleId)) {
+            throw new ResourceNotFoundException("Role not found with id " + roleId);
         }
         return userRepository.findById(userId)
                 .map(user -> {
